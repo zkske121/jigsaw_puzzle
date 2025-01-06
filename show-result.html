@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <title>show-result</title>
+  <script src="https://unpkg.com/react@16/umd/react.development.js"></script>
+  <script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
+  <script src="https://unpkg.com/babel-standalone@6.15.0/babel.min.js"></script>
+
+  <style>
+    #app {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 100wv;
+      height: 100hv;
+    }
+
+    .panel-container {
+      width: 600px;
+      background-color: bisque;
+      display: flex;
+      flex-wrap: wrap;
+    }
+
+    .item {
+      width: 100px;
+      text-align: center;
+      font-size: 15px;
+      color: dimgrey;
+      font-weight: bold;
+      line-height: 96px;
+      color: #ffffff;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="app"></div>
+  <script type="text/babel">
+    const result = [["000000","000000","000000","010000","011100","110000","000000","000000","000000"],["000000","000000","000000","000000","000001","000001","000001","000001","000011"],["011111","000010","000000","000000","000000","000000","000000","000000","000000"],["000000","100000","111000","100000","100000","000000","000000","000000","000000"],["000000","000001","000001","001111","000000","000000","000000","000000","000000"],["000000","000000","000000","000000","000010","001110","001010","000000","000000"],["000000","000000","000000","000000","000000","000000","000000","000100","111100"],["000000","011100","000110","000000","000000","000000","000000","000000","000000"],["000000","000000","000000","000000","000000","000000","110000","111000","000000"]];
+    const MONTH = ['一', '二', '三', '四', '五', '六', '七', '八', '九', '十', '十一', '十二'];
+    const DAY = new Array(31).fill(0).map((_v, i) => i + 1);
+    const WEEK = ['周一', '周二', '周三', '', '', '周四', '周五', '周六', '周日'];
+    const COLOR = ['aqua', 'aquamarine', 'brown', 'chartreuse', 'chocolate', 'crimson', 'darksalmon', 'darkslategrey', 'hotpink'];
+    function getListByResult(list, result) {
+      result.forEach((component, index) => {
+        component.forEach((v, i) => {
+          for(let j = 0; j < v.length; j++) {
+            if (v.charAt(j) === '1') {
+              list[i * 6 + j].color = COLOR[index];
+            }
+          }
+        })
+      });
+
+      return list;
+    }
+
+    function Panel() {
+      const list = getListByResult([].concat(MONTH, DAY, '', '', WEEK).map(v => ({ value: v, color: '' })), result);
+
+      const renderItem = (item, index) => {
+        const { value, color } = item;
+        return <div className="item" style={{ backgroundColor: color, color: color ? '#ffffff' : '#000000' }} key={Math.random()}>{value}</div>;
+      }
+
+      return <div className="panel-container">{list.map(renderItem)}</div>
+    }
+    class App extends React.Component {
+      render() {
+        return <Panel />;
+      }
+    }
+    ReactDOM.render(<App />, document.getElementById('app'));
+  </script>
+</body>
+
+</html>
